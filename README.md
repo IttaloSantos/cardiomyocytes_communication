@@ -1,2 +1,2 @@
 # cardiomyocytes_communication
-Distribuição de Probabilidade para os estados dos Connexons de um Cardiomiócito - Comunicação Molecular
+Comunicação molecular entre as células do músculo cardíaco: propagação de Na+, Ca+2 e K+ entre cardiomiócitos.
