@@ -50,7 +50,7 @@ class CardiomyocyteNetwork(object):
         # Incremento no tempo do processo
         # param T: variável de tempo
 
-        self.T += dt
+        self.T += self.dt
 
     def get_Vj(self):
         # Retorna a diferença entre os potenciais de membrana do TC e RC

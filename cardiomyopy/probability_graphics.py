@@ -23,7 +23,7 @@ def probability_graphic(file):
         )
     ]
     layout = go.Layout(
-        title='Delay',
+        title='Probabilidade de falha na propagação do AP',
         autosize=False,
         width=600,
         height=600,
@@ -33,10 +33,10 @@ def probability_graphic(file):
             b=10,
             t=10
         ),
-        scene={"xaxis": {'title':"Distance [μm]", "tickfont": {"size": 10}, 'type': "linear"},
-                    "yaxis": {'title': "Frequency [x10 Hz]", "tickfont": {"size": 10},
+        scene={"xaxis": {'title':"Vj [mV]", "tickfont": {"size": 10}, 'type': "linear"},
+                    "yaxis": {'title': "N", "tickfont": {"size": 10},
                                 "tickangle": 1},
-                    "zaxis": {'title': "Delay [s]",
+                    "zaxis": {'title': "Pf",
                                 "tickfont": {"size": 10}},
                     "camera": {"eye": {"x": 2, "y": 1, "z": 1.25}},
                     "aspectmode": "cube",

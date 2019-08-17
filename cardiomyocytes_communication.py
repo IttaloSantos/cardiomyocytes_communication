@@ -53,7 +53,7 @@ def main(): # Função principal
     G_HL = 12e-12 # Condutância aberto-fechado
     G_LH = 12e-12 # Condutância fechado-aberto
 
-    N = np.arange(100, 200, 1, dtype = np.int32) # Número total de canais GJ
+    N = np.arange(100, 170, 1, dtype = np.int32) # Número total de canais GJ
     Pt = Pr = np.zeros(N.size) # Potenciais de membrana do transmissor e do receptor
     Pt_max = 40e-3 # máximo valor do potencial de membrana do trasmissor
     Pr_max = 0 # máximo valor do potencial de membrana do receptor
