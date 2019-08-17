@@ -5,17 +5,51 @@ import matplotlib.pyplot as plt
 import plotly.graph_objs as go
 import plotly.offline as ply
 import numpy as np
+import pandas as pd
 
 def probability_graphic(file):
     # Gera um gráfico com a probabilidade de falha de propagação
 
-    P = np.genfromtxt(file,delimiter=',')
+    z_data = pd.read_csv(file)
+    #np.genfromtxt(file,delimiter=',')
 
+    P = z_data.as_matrix()
+    #print(P)
+
+
+    data = [
+        go.Surface(
+            z = P
+        )
+    ]
+    layout = go.Layout(
+        title='Delay',
+        autosize=False,
+        width=600,
+        height=600,
+        margin=dict(
+            l=10,
+            r=10,
+            b=10,
+            t=10
+        ),
+        scene={"xaxis": {'title':"Distance [μm]", "tickfont": {"size": 10}, 'type': "linear"},
+                    "yaxis": {'title': "Frequency [x10 Hz]", "tickfont": {"size": 10},
+                                "tickangle": 1},
+                    "zaxis": {'title': "Delay [s]",
+                                "tickfont": {"size": 10}},
+                    "camera": {"eye": {"x": 2, "y": 1, "z": 1.25}},
+                    "aspectmode": "cube",
+                    }
+    )
+    fig = go.Figure(data=data, layout=layout)
+    ply.plot(fig, filename='Probabilidade_de_Falha_na_Propagacao.html')
+    """
     trace = go.Scatter3d(
         z=P,
         marker=dict(
             size=4,
-            color=z,
+            color=P,
             colorscale='Viridis',
         ),
         line=dict(
@@ -73,3 +107,4 @@ def probability_graphic(file):
     fig = dict(data=data, layout=layout)
 
     ply.plot(fig, filename='Probabilidade_de_Falha_na_Propagacao.html')
+    """

@@ -14,9 +14,9 @@ def F(x, V1, V2, V_treshold, E1, E2, alpha1, alpha2):
     E1_coef = (E1**2 - 1)/E1
     E2_coef = (E2**2 - 1)/E2
 
-    y[0] = (-2 - 2*voltage)*x[0]**2 + ( E1_coef*(E2**2 + 1)/((1-E2**2)*np.sqrt(alpha2)) + (2+voltage)*(E1**2 + 1)/E1 )*x[0] + ( E1_coef*(-2*E2)/((1-E2**2)*np.sqrt(alpha2)) )*x[0]*x[1] - 2
+    y[0] = ( 2/np.sqrt(alpha1) + voltage*2*E1*E1_coef/((1-E1**2)*np.sqrt(alpha1)) )*x[0]**2 - ( 2*(E1**2+1)/(E1*np.sqrt(alpha1)) + ((E2**2+1)/((1-E2**2)*np.sqrt(alpha2)) + (E1**2+1)*voltage/((1-E1**2)*np.sqrt(alpha1)))*E1_coef )*x[0] + ( 2*E2*E1_coef/((1-E2**2)*np.sqrt(alpha2)) )*x[1]*x[0] + 2/np.sqrt(alpha1)
 
-    y[1] = ( (E2**2 + 1)/(E2*np.sqrt(alpha2)) - voltage*E2_coef*((E2**2 + 1)/(1-E1**2)) )*x[1] + ( voltage/(1-E1**2)*E2_coef )*x[0]*x[1] - 2/np.sqrt(alpha2)
+    y[1] = ( 2/np.sqrt(alpha2) + 2*E2*E2_coef/((1-E2**2)*np.sqrt(alpha2)) )*x[1]**2 - ( (E2**2+1)*2/(E2*np.sqrt(alpha2)) + ((E2**2+1)/((1-E2**2)*np.sqrt(alpha2)) + voltage*(E1**2+1)/((1-E1**2)*np.sqrt(alpha1)))*E2_coef )*x[1] + ( 2*voltage*E1*E2_coef/((1-E1**2)*np.sqrt(alpha1)) )*x[0]*x[1] + 2/np.sqrt(alpha2)
 
     return y
 
@@ -28,17 +28,17 @@ def JF(x, V1, V2, V_treshold, E1, E2, alpha1, alpha2):
     E1_coef = (E1**2 - 1)/E1
     E2_coef = (E2**2 - 1)/E2
 
-    y[0,0] = (-2)*(2 + 2*voltage)*x[0] + ( E1_coef * ((E2**2 + 1)/((1-E2**2)*np.sqrt(alpha2))) + (2+voltage)*((E1**2 + 1)/E1) ) + ( E1_coef*(-2*E2)/((1-E2**2)*np.sqrt(alpha2)) )*x[1]
-    y[0,1] = ( E1_coef*(-2*E2)/((1-E2**2)*np.sqrt(alpha2)) )*x[0]
-    y[1,0] = ( voltage/(1-E1**2)*E2_coef )*x[1]
-    y[1,1] = ( (E2**2 + 1)/(E2*np.sqrt(alpha2)) - voltage*E2_coef*((E2**2 + 1)/(1-E1**2)) ) + ( voltage/(1-E1**2)*E2_coef )*x[0]
+    y[0,0] = 2*( 2/np.sqrt(alpha1) + voltage*2*E1*E1_coef/((1-E1**2)*np.sqrt(alpha1)) )*x[0] - ( 2*(E1**2+1)/(E1*np.sqrt(alpha1)) + ((E2**2+1)/((1-E2**2)*np.sqrt(alpha2)) + (E1**2+1)*voltage/((1-E1**2)*np.sqrt(alpha1)))*E1_coef ) + ( 2*E2*E1_coef/((1-E2**2)*np.sqrt(alpha2)) )*x[1]
+    y[0,1] = ( 2*E2*E1_coef/((1-E2**2)*np.sqrt(alpha2)) )*x[0]
+    y[1,0] = ( 2*voltage*E1*E2_coef/((1-E1**2)*np.sqrt(alpha1)) )*x[1]
+    y[1,1] = 2*( 2/np.sqrt(alpha2) + 2*E2*E2_coef/((1-E2**2)*np.sqrt(alpha2)) )*x[1] - ( (E2**2+1)*2/(E2*np.sqrt(alpha2)) + ((E2**2+1)/((1-E2**2)*np.sqrt(alpha2)) + voltage*(E1**2+1)/((1-E1**2)*np.sqrt(alpha1)))*E2_coef ) + ( 2*voltage*E1*E2_coef/((1-E1**2)*np.sqrt(alpha1)) )*x[0]
 
     return y
 
 def non_linear_equations_solve(V1, V2, V_treshold, E1, E2, alpha1, alpha2):
     # Calcula a solução do sistema não-linear aplicando o método de Newton
 
-    x = np.ones(2)*0.0000001
+    x = np.ones(2)*0.0000001 # x[0] = mu1; x[1] = mu2
 
     for i in range(100):
         delta = -np.linalg.inv(JF(x, V1, V2, V_treshold, E1, E2, alpha1, alpha2)).dot(F(x, V1, V2, V_treshold, E1, E2, alpha1, alpha2))
@@ -89,10 +89,10 @@ def differential_equation_solve(p0, Vj, beta1_vj, alpha1_vj, beta2_vj, alpha2_vj
 def dump_results(Pf):
     # Salva os resultados em um arquivo CSV e gera o gráfico
 
-    with open('/home/ittalo/Documentos/Projeto Cardiomyocytes/Codigos/data_Pf.csv', mode='w') as csv_file:
+    with open('/home/ittalo/Documentos/Projeto Cardiomyocytes/Codigos/cardiomyocytes_communication/data_Pf.csv', mode='w') as csv_file:
         csv_writer = csv.writer(csv_file, delimiter=',', quotechar=' ', quoting=csv.QUOTE_MINIMAL)
         for i in Pf:
             csv_writer.writerow(i)
 
     csv_file.close()
-    pg.probability_graphic('/home/ittalo/Documentos/Projeto Cardiomyocytes/Codigos/data_Pf.csv')
+    pg.probability_graphic('/home/ittalo/Documentos/Projeto Cardiomyocytes/Codigos/cardiomyocytes_communication/data_Pf.csv')

@@ -38,8 +38,7 @@ def main(): # Função principal
     mu1, mu2 = utils.non_linear_equations_solve(V1, V2, V_treshold, E1, E2, alpha1, alpha2)
 
     # Resistência Crítica do GJ - Equação 2 do Kilinc 2013
-    R_gj_critical = L*np.sqrt(gamma*Rm/S)*((E2**2 - 2*mu2*E2 + 1)/((1 - E2**2)*np.sqrt(alpha2)) +
-                                             (V2 - V_treshold)/(V1 - V_treshold)*(E1**2 - 2*mu1*E1 + 1)/((1 - E1**2)*np.sqrt(alpha1)))
+    R_gj_critical = L*np.sqrt(gamma*Rm/S)*((E2**2 - 2*mu2*E2 + 1)/((1 - E2**2)*np.sqrt(alpha2)) + (V2 - V_treshold)/(V1 - V_treshold)*(E1**2 - 2*mu1*E1 + 1)/((1 - E1**2)*np.sqrt(alpha1)))
 
     # Condutância Crítica do GJ
     G_gj_critical = 1/(R_gj_critical)
@@ -54,7 +53,7 @@ def main(): # Função principal
     G_HL = 12e-12 # Condutância aberto-fechado
     G_LH = 12e-12 # Condutância fechado-aberto
 
-    N = np.arange(10, 20, 1, dtype = np.int32) # Número total de canais GJ
+    N = np.arange(100, 200, 1, dtype = np.int32) # Número total de canais GJ
     Pt = Pr = np.zeros(N.size) # Potenciais de membrana do transmissor e do receptor
     Pt_max = 40e-3 # máximo valor do potencial de membrana do trasmissor
     Pr_max = 0 # máximo valor do potencial de membrana do receptor

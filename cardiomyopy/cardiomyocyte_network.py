@@ -72,6 +72,8 @@ class CardiomyocyteNetwork(object):
 
         self.Pf = np.zeros((N.size, N.size), dtype=np.float) # Probabilidade de falha da propagação
         for i in range(N.size):
+            self.time_step()
+            print("Tempo de simulacao: ", self.T)
             for j in range(Vj.size):
                 # Constantes de transição dos estados
                 alpha1_vj = self.lamb*np.exp(-self.A_alpha*(Vj[j] - self.V0))
@@ -94,6 +96,7 @@ class CardiomyocyteNetwork(object):
                 for n_HH, n_LH, n_HL in zip(comb[:, 0], comb[:, 1], comb[:, 2]):
 
                     G_gj = n_HH*self.G_HH + n_LH*self.G_LH + n_HL*self.G_HL # Calcula condutância total para cada combinação de connexons
-
+                    #print("G_gj = ", G_gj)
+                    #print("self.G_gj_critical = ", self.G_gj_critical)
                     if G_gj < self.G_gj_critical: # Se a condutância da combinação for menor que a condutância crítica
                         self.Pf[i, j] += math.factorial(N[i])*((P_HH**n_HH)*(P_LH**n_LH)*(P_HL**n_HL))/(math.factorial(n_HH)*math.factorial(n_LH)*math.factorial(n_HL)) # Realiza a distribuição multinomial para a condição de falha na propagação
