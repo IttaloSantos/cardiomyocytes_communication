@@ -45,8 +45,8 @@ def main(): # Função principal
 
     # Constantes para a proteína connexin43 do GJ
     lamb = 0.69
-    A_alpha = 0.04e3 # [1/V]
-    A_beta = 0.07e3 # [1/V]
+    A_alpha = 0.04 # [1/mV]
+    A_beta = 0.07 # [1/mV]
     V0 = 62e-3 # Tensão da junção para satisfazer a igualdade de lamb nas equações [V]
 
     G_HH = 73e-12 # Condutância aberto-aberto
@@ -65,11 +65,11 @@ def main(): # Função principal
 
     # Inicializar a rede de cardiomiócitos
     cardNet = CardiomyocyteNetwork(G_gj_critical, lamb, A_alpha, A_beta, V0, G_HH, G_HL, G_LH)
-    cardNet.initialize_parameters(Pt, Pr)
+    cardNet.initialize_parameters(Pt, Pr, Vj)
     cardNet.set_time(dt, tc)
 
     # Iniciar a comunicação
-    cardNet.communication(N, Vj, Pt_max, Pr_max)
+    cardNet.communication(N, Pt_max, Pr_max)
 
     # Gerar o gráfico das probabilidades
     cardNet.probability_graphic()

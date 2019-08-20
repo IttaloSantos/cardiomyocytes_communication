@@ -86,7 +86,7 @@ def differential_equation_solve(p0, Vj, beta1_vj, alpha1_vj, beta2_vj, alpha2_vj
 
     return odeint(probability_ODE, p0, Vj, args=(beta1_vj, alpha1_vj, beta2_vj, alpha2_vj)) # Resolve a equação diferencial
 
-def dump_results(Pf):
+def dump_results(Pf, N, Vj):
     # Salva os resultados em um arquivo CSV e gera o gráfico
 
     with open('/home/ittalo/Documentos/Projeto Cardiomyocytes/Codigos/cardiomyocytes_communication/data_Pf.csv', mode='w') as csv_file:
@@ -95,4 +95,4 @@ def dump_results(Pf):
             csv_writer.writerow(i)
 
     csv_file.close()
-    pg.probability_graphic('/home/ittalo/Documentos/Projeto Cardiomyocytes/Codigos/cardiomyocytes_communication/data_Pf.csv')
+    pg.probability_graphic('/home/ittalo/Documentos/Projeto Cardiomyocytes/Codigos/cardiomyocytes_communication/data_Pf.csv', N, Vj)

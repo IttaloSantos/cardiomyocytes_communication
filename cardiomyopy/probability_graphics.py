@@ -2,21 +2,44 @@
 # -*- coding: utf-8 -*-
 
 import matplotlib.pyplot as plt
+import matplotlib as mpl
+from mpl_toolkits.mplot3d import Axes3D
 import plotly.graph_objs as go
 import plotly.offline as ply
 import numpy as np
 import pandas as pd
 
-def probability_graphic(file):
+def probability_graphic(file, N, Vj):
     # Gera um gráfico com a probabilidade de falha de propagação
 
-    z_data = pd.read_csv(file)
+    z_data = pd.read_csv(file, header=None)
     #np.genfromtxt(file,delimiter=',')
 
     P = z_data.as_matrix()
-    #print(P)
 
+    # Gráfico com Matplotlib
 
+    N_plot = np.zeros((len(N), len(Vj)))
+    Vj_plot = np.zeros((len(N), len(Vj)))
+    for i in range(len(N)):
+        for j in range(len(Vj)):
+            N_plot[i, j] = N[i]
+            Vj_plot[i, j] = Vj[j]
+
+    mpl.rcParams['legend.fontsize'] = 10
+
+    fig = plt.figure()
+    ax = fig.gca(projection='3d')
+    for i in range(N.size):
+        ax.plot(N_plot[i,:], Vj_plot[i,:], 1-P[:,i])
+
+    ax.legend()
+
+    plt.show()
+
+    # Gráfico com Plotly
+
+    """
     data = [
         go.Surface(
             z = P
@@ -45,8 +68,10 @@ def probability_graphic(file):
     fig = go.Figure(data=data, layout=layout)
     ply.plot(fig, filename='Probabilidade_de_Falha_na_Propagacao.html')
     """
+
+    """
     trace = go.Scatter3d(
-        z=P,
+        x=N, y=1000*Vj, z=P[:,0],
         marker=dict(
             size=4,
             color=P,
@@ -67,14 +92,14 @@ def probability_graphic(file):
         title='Failure Conductance Probability',
         scene=dict(
             xaxis=dict(
-                title='Vj(mV)',
+                title='N',
                 gridcolor='rgb(255, 255, 255)',
                 zerolinecolor='rgb(255, 255, 255)',
                 showbackground=True,
                 backgroundcolor='rgb(230, 230,230)'
             ),
             yaxis=dict(
-                title='N',
+                title='Vj(mV)',
                 gridcolor='rgb(255, 255, 255)',
                 zerolinecolor='rgb(255, 255, 255)',
                 showbackground=True,
