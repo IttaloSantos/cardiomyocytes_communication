@@ -18,7 +18,7 @@ def probability_graphic(file, N, Vj):
     P = z_data.as_matrix()
 
     # Gráfico com Matplotlib
-
+    """
     N_plot = np.zeros((len(N), len(Vj)))
     Vj_plot = np.zeros((len(N), len(Vj)))
     for i in range(len(N)):
@@ -40,9 +40,10 @@ def probability_graphic(file, N, Vj):
     # Gráfico com Plotly
 
     """
+
     data = [
         go.Surface(
-            z = P
+            x=Vj, y=N, z = P
         )
     ]
     layout = go.Layout(
@@ -63,27 +64,29 @@ def probability_graphic(file, N, Vj):
                                 "tickfont": {"size": 10}},
                     "camera": {"eye": {"x": 2, "y": 1, "z": 1.25}},
                     "aspectmode": "cube",
-                    }
+                    },
     )
     fig = go.Figure(data=data, layout=layout)
     ply.plot(fig, filename='Probabilidade_de_Falha_na_Propagacao.html')
-    """
 
     """
-    trace = go.Scatter3d(
-        x=N, y=1000*Vj, z=P[:,0],
-        marker=dict(
-            size=4,
-            color=P,
-            colorscale='Viridis',
-        ),
-        line=dict(
-            color='#1f77b4',
-            width=1
+    traces = []
+    for i in range(len(N)):
+        trace = go.Scatter3d(
+            x=N[i], y=Vj[i], z=P[:,i],
+            marker=dict(
+                size=4,
+                color=P,
+                colorscale='Viridis',
+            ),
+            line=dict(
+                color='#1f77b4',
+                width=1
+            )
         )
-    )
+        traces.append(trace)
 
-    data = [trace]
+    data = traces
 
     layout = dict(
         width=800,

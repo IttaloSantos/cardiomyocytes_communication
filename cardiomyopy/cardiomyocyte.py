@@ -22,7 +22,7 @@ class Cardiomyocyte(object):
         # param Pt_max, Pr_max: máximos valores dos potenciais de membrana
         # param Nsize: tamanho do vetor número de canais GJ
 
-        self.Pt = np.linspace(Pt_max, 0, Nsize)
+        self.Pt = np.linspace(0, Pt_max, Nsize)
         if Pr_max != 0:
             self.Pr = np.linspace(Pr_max, 0, Nsize)
 

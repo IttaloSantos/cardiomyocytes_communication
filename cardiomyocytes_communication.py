@@ -19,9 +19,9 @@ def main(): # Função principal
     r = 11e-6 # Raio do cardiomiócito [m]
 
     S = 2*np.pi*r**2 + 2*np.pi*r*L # Área da superfície da membrana do cardiomiócito [m2]
-    V1 = -87e-3 # Potencial de repouso da membrana do cardiomiócito [V]
-    V2 = 28.8e-3 # Potencial de equilíbrio do Sódio (Na+) [V]
-    V_treshold = -34.8e-3 # Tensão limiar de ativação para liberar fluxo de Na+ [V]
+    V1 = -87#e-3 # Potencial de repouso da membrana do cardiomiócito [mV]
+    V2 = 28.8#e-3 # Potencial de equilíbrio do Sódio (Na+) [mV]
+    V_treshold = -34.8#e-3 # Tensão limiar de ativação para liberar fluxo de Na+ [mV]
 
     alpha1 = 1
     alpha2 = 108
@@ -53,9 +53,9 @@ def main(): # Função principal
     G_HL = 12e-12 # Condutância aberto-fechado
     G_LH = 12e-12 # Condutância fechado-aberto
 
-    N = np.arange(100, 170, 1, dtype = np.int32) # Número total de canais GJ
+    N = np.arange(100, 200, 1, dtype = np.int32) # Número total de canais GJ
     Pt = Pr = np.zeros(N.size) # Potenciais de membrana do transmissor e do receptor
-    Pt_max = 40e-3 # máximo valor do potencial de membrana do trasmissor
+    Pt_max = 40 # máximo valor do potencial de membrana do trasmissor
     Pr_max = 0 # máximo valor do potencial de membrana do receptor
     Vj = Pt-Pr # Tensão da junção - Diferença entre os potenciais de membrana do Tc e do Rc
 
