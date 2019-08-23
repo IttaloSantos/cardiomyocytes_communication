@@ -43,7 +43,7 @@ def probability_graphic(file, N, Vj):
 
     data = [
         go.Surface(
-            x=Vj, y=N, z = P
+            x=Vj[-len(Vj):], y=N[-len(N):], z = P
         )
     ]
     layout = go.Layout(
