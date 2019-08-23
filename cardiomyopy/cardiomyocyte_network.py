@@ -3,6 +3,7 @@
 import numpy as np
 import math as math
 from time import clock
+from decimal import Decimal
 
 from cardiomyopy import utils as utils
 from cardiomyopy.cardiomyocyte import Cardiomyocyte
@@ -67,7 +68,7 @@ class CardiomyocyteNetwork(object):
     def failure_probability_calc(self, i, j, N, n_HH, n_LH, n_HL):
         # Realiza a distribuição multinomial para a condição de falha na propagação
 
-        self.Pf[i, j] += math.factorial(N)*((self.P_HH**n_HH)*(self.P_LH**n_LH)*(self.P_HL**n_HL))/(math.factorial(n_HH)*math.factorial(n_LH)*math.factorial(n_HL))
+        self.Pf[i, j] += float(math.factorial(N)*Decimal((self.P_HH**n_HH)*(self.P_LH**n_LH)*(self.P_HL**n_HL))/(math.factorial(n_HH)*math.factorial(n_LH)*math.factorial(n_HL)))
 
     def communication(self, N, Pt_max, Pr_max):
         # Estabelece a comunicação propriamente dita
@@ -80,15 +81,15 @@ class CardiomyocyteNetwork(object):
         self.N = N
 
         self.Pf = np.zeros((N.size, N.size), dtype=np.float) # Probabilidade de falha da propagação
-        for i in range(self.Vj.size):
+        for i in range(N.size):
             self.time_step()
             print("Tempo do processo: ", round(self.T, 1), "s")
-            for j in range(N.size):
+            for j in range(self.Vj.size):
                 # Constantes de transição dos estados
-                alpha1_vj = self.lamb*np.exp(-self.A_alpha*(self.Vj[i] - self.V0))
-                alpha2_vj = self.lamb*np.exp(self.A_alpha*(self.Vj[i] + self.V0))
-                beta1_vj = self.lamb*np.exp(self.A_beta*(self.Vj[i] - self.V0))
-                beta2_vj = self.lamb*np.exp(-self.A_beta*(self.Vj[i] + self.V0))
+                alpha1_vj = self.lamb*np.exp(-self.A_alpha*(self.Vj[j] - self.V0))
+                alpha2_vj = self.lamb*np.exp(self.A_alpha*(self.Vj[j] + self.V0))
+                beta1_vj = self.lamb*np.exp(self.A_beta*(self.Vj[j] - self.V0))
+                beta2_vj = self.lamb*np.exp(-self.A_beta*(self.Vj[j] + self.V0))
 
                 # *** Equações Diferenciais para as probabilidades - Começo ***
                 t = np.arange(0, 1500.01e-3, 0.01e-3)
@@ -100,11 +101,11 @@ class CardiomyocyteNetwork(object):
                 self.P_HH = 1 - (self.P_LH + self.P_HL) # Probabilidade do estado High-High dos canais GJ, ignorando o estado Low-Low
 
                 # *** Equações Diferenciais para a as probabilidades - Fim ***
-                comb = utils.combination(N[j]) # Retorna matriz com todas as combinações de três números cuja soma é igual a N
+                comb = utils.combination(N[i]) # Retorna matriz com todas as combinações de três números cuja soma é igual a N
 
                 for n_HH, n_LH, n_HL in zip(comb[:, 0], comb[:, 1], comb[:, 2]):
 
                     G_gj = n_HH*self.G_HH + n_LH*self.G_LH + n_HL*self.G_HL # Calcula condutância total para cada combinação de connexons
 
                     if G_gj > self.G_gj_critical: # Se a condutância da combinação for menor que a condutância crítica
-                        self.failure_probability_calc(i, j, N[j], n_HH, n_LH, n_HL)
+                        self.failure_probability_calc(i, j, N[i], n_HH, n_LH, n_HL)
